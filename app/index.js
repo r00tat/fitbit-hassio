@@ -1,6 +1,4 @@
-import * as settings from './settings';
-
-console.log('Hello world!');
+import { initialize as initializeSettings } from './settings';
 
 let settings = {};
 
@@ -9,4 +7,10 @@ function settingsChanged(settings) {
   console.info(`new settings: ${JSON.stringify(settings)}`);
 }
 
-settings.initialize(settingsChanged);
+try {
+  console.log('Hello world!');
+
+  initializeSettings(settingsChanged);
+} catch (err) {
+  console.error('Failed to initialize', err);
+}
