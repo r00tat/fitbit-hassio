@@ -10,3 +10,21 @@
   height: 100%;
   fill: white;
 }
+
+.list-item {
+  height: 112;
+}
+
+.list-item text {
+  fill: 'white';
+  x: 50%;
+  text-anchor: middle;
+  font-size: 24;
+}
+
+.line {
+  height: 6;
+  width: 100%;
+  fill: #222222;
+  y: 100%-6;
+}

@@ -1,3 +1,25 @@
 <svg>
-  <rect id="background" />
+  <defs>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="import" href="/mnt/sysassets/widgets_common.gui" />
+    <!-- Additional Imports -->
+    <link rel="import" href="/mnt/sysassets/widgets/baseview_widget.gui" />
+    <link rel="import" href="/mnt/sysassets/widgets/scrollview_widget.gui" />
+
+    <symbol id="my-item" href="#scrollview-item" class="list-item">
+      <text id="text" />
+      <rect class="line" />
+    </symbol>
+  </defs>
+  <use href="#scrollview" id="scrollview">
+    <use href="#my-item">
+      <set href="#text" attributeName="text-buffer" to="Text Item 1" />
+    </use>
+    <use href="#my-item" height="100">
+      <set href="#text" attributeName="text-buffer" to="Text Item 2" />
+    </use>
+    <use href="#my-item" height="100">
+      <set href="#text" attributeName="text-buffer" to="Text Item 2" />
+    </use>
+  </use>
 </svg>
