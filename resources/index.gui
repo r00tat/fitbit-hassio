@@ -5,21 +5,32 @@
     <!-- Additional Imports -->
     <link rel="import" href="/mnt/sysassets/widgets/baseview_widget.gui" />
     <link rel="import" href="/mnt/sysassets/widgets/scrollview_widget.gui" />
+    <link rel="import" href="/mnt/sysassets/widgets/tile_list_widget.gui" />
 
-    <symbol id="my-item" href="#scrollview-item" class="list-item">
-      <text id="text" />
+    <symbol id="my-item" href="#tile-list-item" class="list-item" display="none">
+      <rect class="bg" />
+      <text id="text" text-length="32" />
       <rect class="line" />
+      <rect id="touch" pointer-events="all" />
     </symbol>
   </defs>
-  <use href="#scrollview" id="scrollview">
-    <use href="#my-item">
-      <set href="#text" attributeName="text-buffer" to="Text Item 1" />
-    </use>
-    <use href="#my-item" height="100">
-      <set href="#text" attributeName="text-buffer" to="Text Item 2" />
-    </use>
-    <use href="#my-item" height="100">
-      <set href="#text" attributeName="text-buffer" to="Text Item 2" />
+
+  <use id="myList" href="#tile-list">
+    <var id="virtual" value="1" />
+    <var id="reorder-enabled" value="0" />
+    <var id="peek-enabled" value="0" />
+    <var id="separator-height-bottom" value="2" />
+
+    <use id="my-pool" href="#tile-list-pool">
+      <use id="my-pool[0]" href="#my-item" />
+      <use id="my-pool[1]" href="#my-item" />
+      <use id="my-pool[2]" href="#my-item" />
+      <use id="my-pool[3]" href="#my-item" />
+      <use id="my-pool[4]" href="#my-item" />
+      <use id="my-pool[5]" href="#my-item" />
+      <use id="my-pool[6]" href="#my-item" />
+      <use id="my-pool[7]" href="#my-item" />
+
     </use>
   </use>
 </svg>
