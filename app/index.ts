@@ -1,6 +1,7 @@
-import { initialize as initializeSettings } from './settings';
+import { Script, Settings } from '../common/settings';
 import { setupList } from './list';
-import { Settings } from '../common/settings';
+import { registerHandler } from './messaging';
+import { initialize as initializeSettings, settingsMessage } from './settings';
 
 let settings: Settings = {};
 
@@ -10,7 +11,7 @@ function settingsChanged(newSettings: Settings) {
   setupList(settings.scripts, onClick);
 }
 
-function onClick(script) {
+function onClick(script: Script) {
   console.info(`clicked on script ${JSON.stringify(script)}`);
 }
 
@@ -18,6 +19,7 @@ try {
   console.log('Hello world!');
 
   initializeSettings(settingsChanged);
+  registerHandler('settings', settingsMessage);
 } catch (err) {
   console.error('Failed to initialize', err);
 }

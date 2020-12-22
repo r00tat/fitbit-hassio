@@ -4,10 +4,10 @@
   Callback should be used to update your UI.
 */
 import { me } from 'appbit';
-import { me as device } from 'device';
 import * as fs from 'fs';
 import * as messaging from 'messaging';
 import { Settings } from '../common/settings';
+import { Message, MessagingEvent } from '../common/messaging';
 
 const SETTINGS_TYPE = 'cbor';
 const SETTINGS_FILE = 'settings.cbor';
@@ -20,11 +20,10 @@ export function initialize(callback: (settings: Settings) => void): void {
   onsettingschange(settings);
 }
 
-// Received message containing settings data
-messaging.peerSocket.addEventListener('message', (evt: MessageEvent) => {
-  settings[evt.data.key] = evt.data.value;
+export function settingsMessage(message: Message) {
+  settings[message.data.key] = message.data.value;
   onsettingschange(settings);
-});
+}
 
 // Register for the unload event
 me.addEventListener('unload', saveSettings);
