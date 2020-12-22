@@ -1,6 +1,6 @@
 import { Script, Settings } from '../common/settings';
 import { setupList } from './list';
-import { registerHandler } from './messaging';
+import { registerHandler } from '../common/messaging';
 import { initialize as initializeSettings, settingsMessage } from './settings';
 
 let settings: Settings = {};
@@ -21,6 +21,9 @@ try {
 
   initializeSettings(settingsChanged);
   registerHandler('settings', settingsMessage);
+  registerHandler('response', (message) => {
+    console.info(`got response: ${JSON.stringify(message.data)}`);
+  });
 } catch (err) {
   console.error('Failed to initialize', err);
 }

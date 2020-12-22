@@ -1,7 +1,7 @@
 import { me as companion } from 'companion';
-import * as messaging from 'messaging';
 import { settingsStorage } from 'settings';
-import { Message } from '../common/messaging';
+import { sendData, registerHandler, Message } from '../common/messaging';
+import { Hassio } from './hassio';
 
 if (!companion.permissions.granted('access_internet')) {
   console.error("We're not allowed to access the internet!");
@@ -13,6 +13,24 @@ function initialize() {
     if (evt.oldValue !== evt.newValue) {
       sendValue(evt.key, evt.newValue);
     }
+  });
+  registerHandler('request', hassioRequest);
+}
+
+async function hassioRequest(message: Message) {
+  const {
+    data: { name, params = '{}' },
+  } = message;
+  const url = JSON.parse(settingsStorage.getItem('url')).name;
+  console.info(`url: ${JSON.stringify(url)}`);
+  const token = JSON.parse(settingsStorage.getItem('token')).name;
+  const hass = new Hassio(url, token);
+  console.info(`calling hassio (${url}) script ${name} with params ${params}`);
+  const response = await hass.callService('script', name, params);
+  console.info(`hassio response: ${JSON.stringify(response)}`);
+  sendData({
+    type: response,
+    data: response,
   });
 }
 
@@ -27,15 +45,6 @@ function sendValue(key: string, val: string) {
 
 function sendSettingData(data: any) {
   sendData({ data, type: 'settings' });
-}
-
-function sendData(data: Message) {
-  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
-    console.info(`sending to app: ${JSON.stringify(data)}`);
-    messaging.peerSocket.send(data);
-  } else {
-    console.log('No peerSocket connection');
-  }
 }
 
 initialize();

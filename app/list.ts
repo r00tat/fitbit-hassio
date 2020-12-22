@@ -1,4 +1,5 @@
 import document from 'document';
+import { sendData } from '../common/messaging';
 import { Script } from '../common/settings';
 
 interface ListElement extends Element {
@@ -34,6 +35,10 @@ export function setupList(
             console.log(`touched: ${index}`);
             console.log(`script: ${JSON.stringify(script)}`);
             onClick(script);
+            sendData({
+              type: 'request',
+              data: script,
+            });
           } catch (err) {
             console.error(`failed to handle click on ${index}`, err), err.stack;
           }
