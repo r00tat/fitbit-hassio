@@ -6,13 +6,15 @@ let settings = {};
 function settingsChanged(newSettings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
+  setupList(settings.scripts, onClick);
 }
+
+function onClick(script) {}
 
 try {
   console.log('Hello world!');
 
   initializeSettings(settingsChanged);
-  setupList();
 } catch (err) {
   console.error('Failed to initialize', err);
 }
