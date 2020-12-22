@@ -30,9 +30,13 @@ export function setupList(
         tile.getElementById('text').text = script.name;
         const touch = tile.getElementById('touch');
         touch.addEventListener('click', () => {
-          console.log(`touched: ${index}`);
-          console.log(`script: ${JSON.stringify(script)}`);
-          onClick(script);
+          try {
+            console.log(`touched: ${index}`);
+            console.log(`script: ${JSON.stringify(script)}`);
+            onClick(script);
+          } catch (err) {
+            console.error(`failed to handle click on ${index}`, err), err.stack;
+          }
         });
       }
     },

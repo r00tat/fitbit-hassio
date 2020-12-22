@@ -8,7 +8,7 @@ if (!companion.permissions.granted('access_internet')) {
 }
 
 function initialize() {
-  console.log('Hello world!');
+  console.log('Starting companion!');
   settingsStorage.addEventListener('change', (evt) => {
     if (evt.oldValue !== evt.newValue) {
       sendValue(evt.key, evt.newValue);
@@ -26,11 +26,12 @@ function sendValue(key: string, val: string) {
 }
 
 function sendSettingData(data: any) {
-  sendData({ ...data, type: 'settings' });
+  sendData({ data, type: 'settings' });
 }
 
 function sendData(data: Message) {
   if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+    console.info(`sending to app: ${JSON.stringify(data)}`);
     messaging.peerSocket.send(data);
   } else {
     console.log('No peerSocket connection');

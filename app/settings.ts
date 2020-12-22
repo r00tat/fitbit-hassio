@@ -5,9 +5,8 @@
 */
 import { me } from 'appbit';
 import * as fs from 'fs';
-import * as messaging from 'messaging';
+import { Message } from '../common/messaging';
 import { Settings } from '../common/settings';
-import { Message, MessagingEvent } from '../common/messaging';
 
 const SETTINGS_TYPE = 'cbor';
 const SETTINGS_FILE = 'settings.cbor';
@@ -20,7 +19,8 @@ export function initialize(callback: (settings: Settings) => void): void {
   onsettingschange(settings);
 }
 
-export function settingsMessage(message: Message) {
+export function settingsMessage(message: Message): void {
+  console.info(`settings message: ${JSON.stringify(message)}`);
   settings[message.data.key] = message.data.value;
   onsettingschange(settings);
 }

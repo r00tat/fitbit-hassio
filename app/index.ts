@@ -8,6 +8,7 @@ let settings: Settings = {};
 function settingsChanged(newSettings: Settings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
+  console.info(`new scripts: ${JSON.stringify(newSettings.scripts)}`);
   setupList(settings.scripts, onClick);
 }
 

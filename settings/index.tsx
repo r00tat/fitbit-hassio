@@ -11,7 +11,7 @@ function AddScriptItem() {
 
 function ScriptItem({ name, params, propChanged }) {
   return (
-    <Section title="">
+    <Section title={<Text>Script {name}</Text>}>
       <TextInput
         title="Script name"
         label="script"
@@ -88,14 +88,21 @@ const SettingsPage = ({ settings, settingsStorage }) => {
       <Section title={<Text>Scripts</Text>}>
         <AdditiveList
           settingsKey="scripts"
-          addAction={<AddScriptItem />}
+          addAction={
+            <TextInput
+              title="Script name"
+              label="Add new script"
+              placeholder="name of the script"
+              action="Add Item"
+            />
+          }
           renderItem={({ name, params }) => (
             <ScriptItem name={name} params={params} propChanged={propChanged} />
           )}
         />
       </Section>
 
-      <Section title="">
+      <Section title={<Text>Reset</Text>}>
         <Button
           label="Clear Settings"
           onClick={() => {
