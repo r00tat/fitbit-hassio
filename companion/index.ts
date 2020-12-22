@@ -15,7 +15,7 @@ function initialize() {
   });
 }
 
-function sendValue(key, val) {
+function sendValue(key: string, val: string) {
   if (val) {
     sendSettingData({
       key: key,
@@ -24,11 +24,11 @@ function sendValue(key, val) {
   }
 }
 
-function sendSettingData(data) {
+function sendSettingData(data: any) {
   sendData({ ...data, type: 'settings' });
 }
 
-function sendData(data) {
+function sendData(data: any) {
   if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
     messaging.peerSocket.send(data);
   } else {

@@ -7,20 +7,21 @@ import { me } from 'appbit';
 import { me as device } from 'device';
 import * as fs from 'fs';
 import * as messaging from 'messaging';
+import { Settings } from '../common/settings';
 
 const SETTINGS_TYPE = 'cbor';
 const SETTINGS_FILE = 'settings.cbor';
 
-let settings, onsettingschange;
+let settings: Settings, onsettingschange: (settings: Settings) => void;
 
-export function initialize(callback) {
+export function initialize(callback: (settings: Settings) => void): void {
   settings = loadSettings();
   onsettingschange = callback;
   onsettingschange(settings);
 }
 
 // Received message containing settings data
-messaging.peerSocket.addEventListener('message', function (evt) {
+messaging.peerSocket.addEventListener('message', (evt: MessageEvent) => {
   settings[evt.data.key] = evt.data.value;
   onsettingschange(settings);
 });

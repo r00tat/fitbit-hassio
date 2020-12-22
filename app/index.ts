@@ -1,15 +1,18 @@
 import { initialize as initializeSettings } from './settings';
 import { setupList } from './list';
+import { Settings } from '../common/settings';
 
-let settings = {};
+let settings: Settings = {};
 
-function settingsChanged(newSettings) {
+function settingsChanged(newSettings: Settings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
   setupList(settings.scripts, onClick);
 }
 
-function onClick(script) {}
+function onClick(script) {
+  console.info(`clicked on script ${JSON.stringify(script)}`);
+}
 
 try {
   console.log('Hello world!');

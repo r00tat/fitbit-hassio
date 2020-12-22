@@ -1,19 +1,17 @@
-function AddScriptItem(props) {
+function AddScriptItem() {
   return (
-    <Section>
-      <TextInput
-        title="Script name"
-        label="Add new script"
-        placeholder="name of the script"
-        action="Add Item"
-      />
-    </Section>
+    <TextInput
+      title="Script name"
+      label="Add new script"
+      placeholder="name of the script"
+      action="Add Item"
+    />
   );
 }
 
 function ScriptItem({ name, params, propChanged }) {
   return (
-    <Section>
+    <Section title="">
       <TextInput
         title="Script name"
         label="script"
@@ -32,7 +30,7 @@ function ScriptItem({ name, params, propChanged }) {
   );
 }
 
-const HassSettings = (props) => (
+const HassSettings = () => (
   <Section title={<Text>Homeassistant Settings</Text>}>
     <TextInput
       title="URL"
@@ -54,7 +52,11 @@ const SettingsPage = ({ settings, settingsStorage }) => {
     settings.scripts = '[]';
   }
 
-  const propChanged = (name, key, { name: value }) => {
+  const propChanged = (
+    name: string,
+    key: string,
+    { name: value }: { name: string }
+  ) => {
     try {
       const scripts = JSON.parse(settings.scripts);
       console.info(
@@ -86,26 +88,14 @@ const SettingsPage = ({ settings, settingsStorage }) => {
       <Section title={<Text>Scripts</Text>}>
         <AdditiveList
           settingsKey="scripts"
-          addAction={
-            <TextInput
-              title="Script name"
-              label="Add new script"
-              placeholder="name of the script"
-              action="Add Item"
-            />
-          }
-          renderItem={({ name, params }, idx) => (
-            <ScriptItem
-              name={name}
-              params={params}
-              propChanged={propChanged}
-              idx={idx}
-            />
+          addAction={<AddScriptItem />}
+          renderItem={({ name, params }) => (
+            <ScriptItem name={name} params={params} propChanged={propChanged} />
           )}
         />
       </Section>
 
-      <Section>
+      <Section title="">
         <Button
           label="Clear Settings"
           onClick={() => {
