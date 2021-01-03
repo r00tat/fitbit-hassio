@@ -28,7 +28,7 @@ export function setupList(
     configureTile: (tile, { type, script, index }) => {
       // console.log(`Item: ${index}`);
       if (type == 'my-pool') {
-        tile.getElementById('text').text = script.name;
+        tile.getElementById('text').text = script.title || script.name;
         const touch = tile.getElementById('touch');
         touch.addEventListener('click', () => {
           try {
