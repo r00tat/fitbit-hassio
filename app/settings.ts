@@ -33,6 +33,7 @@ function loadSettings() {
   try {
     return fs.readFileSync(SETTINGS_FILE, SETTINGS_TYPE);
   } catch (ex) {
+    console.info(`settings could not be loaded`, ex, ex.stack);
     return {};
   }
 }

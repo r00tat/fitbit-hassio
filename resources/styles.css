@@ -56,3 +56,34 @@
   height: 100%;
   opacity: 0;
 }
+
+/* confirm */
+
+#confirm-text {
+  /* width: 100%; */
+  height: 20%;
+  x: 50%;
+  text-anchor: middle;
+  font-size: 24;
+  /* y: 0; */
+  z-index: 100;
+}
+
+#button-yes {
+  /* y: 20%; */
+}
+
+#button-no {
+  /* y: 60%; */
+}
+
+.confirm-button {
+  height: 20%;
+}
+
+.confirm-button text {
+  fill: 'white';
+  x: 50%;
+  text-anchor: middle;
+  font-size: 24;
+}

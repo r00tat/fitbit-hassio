@@ -29,7 +29,8 @@
     "defaultLanguage": "en-US"
   },
   "scripts": {
-    "build": "fitbit-build",
-    "debug": "fitbit"
+    "build": "npx fitbit-build",
+    "debug": "npx fitbit",
+    "dev": "npx fitbit"
   }
 }

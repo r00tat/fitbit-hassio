@@ -1,5 +1,4 @@
 import document from 'document';
-import { sendData } from '../common/messaging';
 import { Script } from '../common/settings';
 
 interface ListElement extends Element {
@@ -11,7 +10,7 @@ interface ListElement extends Element {
 }
 
 export function setupList(
-  scripts: Script[],
+  scripts: Script[] = [],
   onClick: (script: Script) => void
 ): void {
   console.info(`scripts: ${JSON.stringify(scripts)}`);
@@ -32,15 +31,11 @@ export function setupList(
         const touch = tile.getElementById('touch');
         touch.addEventListener('click', () => {
           try {
-            console.log(`touched: ${index}`);
+            // console.log(`touched: ${index}`);
             console.log(`script: ${JSON.stringify(script)}`);
             onClick(script);
-            sendData({
-              type: 'request',
-              data: script,
-            });
           } catch (err) {
-            console.error(`failed to handle click on ${index}`, err), err.stack;
+            console.error(`failed to handle click on ${index}`, err, err.stack);
           }
         });
       }
