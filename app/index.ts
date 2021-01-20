@@ -36,9 +36,9 @@ function onScriptClick(script: Script) {
     (document as any).replaceSync(`./resources/confirm.gui`);
     // const buttonYes = document.getElementById('button-yes');
     // console.info(`button yes: ${buttonYes.getAttribute('id')}`);
-    document.getElementById(
-      'confirm-text'
-    ).text = `run ${scriptToCall.title} (${scriptToCall.name})?`.substr(0, 40);
+    document.getElementById('confirm-text').text = `run ${
+      scriptToCall.title || scriptToCall.name
+    }?`.substr(0, 40);
     document
       .getElementById('button-yes')
       .getElementById('touch')
