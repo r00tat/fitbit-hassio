@@ -1,32 +1,103 @@
-function ScriptItem({ name, params, title, propChanged }) {
+import { Script } from '../common/settings';
+
+interface PropChangedFunction {
+  ({
+    index,
+    key,
+    value,
+    action,
+  }: {
+    index: number;
+    key?: string;
+    value?: string;
+    action?: 'change' | 'moveup' | 'movedown' | 'delete';
+  }): void;
+}
+
+function ScriptItem({
+  name,
+  params,
+  title,
+  propChanged,
+  index,
+  scripts,
+}: {
+  name: string;
+  params: string;
+  title: string;
+  propChanged: PropChangedFunction;
+  index: number;
+  scripts: Script[];
+}) {
   return (
-    <Section title={<Text>Script {name}</Text>}>
+    <Section title={<Text>Script {title || name}</Text>}>
       <TextInput
         title="Display Title"
         label="title"
         placeholder="title displayed on the watch"
         value={title}
-        onChange={(value) => propChanged(name, 'title', value)}
+        onChange={(value) =>
+          propChanged({
+            index,
+            key: 'title',
+            value: (value as any).name,
+          })
+        }
       />
       <TextInput
         title="Script name"
         label="script"
         placeholder="name of the script"
         value={name}
-        onChange={(value) => propChanged(name, 'name', value)}
+        onChange={(value) =>
+          propChanged({ index, key: 'name', value: (value as any).name })
+        }
       />
       <TextInput
         title="Parameters"
         label="params"
         placeholder="JSON encoded arguments"
         value={params}
-        onChange={(value) => propChanged(name, 'params', value)}
+        onChange={(value) =>
+          propChanged({ index, key: 'params', value: (value as any).name })
+        }
       />
+      <Button
+        label="Delete"
+        onClick={() => {
+          propChanged({
+            index,
+            action: 'delete',
+          });
+        }}
+      />
+      {index > 0 && (
+        <Button
+          label="Move up"
+          onClick={() => {
+            propChanged({
+              index,
+              action: 'moveup',
+            });
+          }}
+        />
+      )}
+      {index < scripts.length - 1 && (
+        <Button
+          label="Move down"
+          onClick={() => {
+            propChanged({
+              index,
+              action: 'movedown',
+            });
+          }}
+        />
+      )}
     </Section>
   );
 }
 
-const HassSettings = () => (
+const HassSettings = ({ addScript }: { addScript: () => void }) => (
   <Section title={<Text>Homeassistant Settings</Text>}>
     <TextInput
       title="URL"
@@ -40,53 +111,95 @@ const HassSettings = () => (
       placeholder=""
       settingsKey="token"
     />
+    <Button
+      label="Add a new script"
+      onClick={() => {
+        addScript();
+      }}
+    />
   </Section>
 );
+
+const Scripts = (scripts: Script[], propChanged: PropChangedFunction) => {
+  return scripts.map(({ name = '', title = '', params = '' }, index) => (
+    <ScriptItem
+      name={name}
+      title={title}
+      params={params}
+      propChanged={propChanged}
+      index={index}
+      scripts={scripts}
+    />
+  ));
+};
 
 const SettingsPage = ({ settings, settingsStorage }) => {
   try {
     if (!settings.scripts) {
-      settings.scripts = '[]';
+      settings.scripts = JSON.stringify([
+        {
+          title: 'My first script',
+          name: 'script_name',
+          params: '{}',
+        },
+      ]);
     }
 
-    const propChanged = (
-      name: string,
-      key: string,
-      { name: value }: { name: string }
-    ) => {
+    const propChanged: PropChangedFunction = ({
+      index,
+      key,
+      value,
+      action = 'change',
+    }) => {
       try {
-        const scripts = JSON.parse(settings.scripts);
+        const scripts: Script[] = JSON.parse(settings.scripts);
         console.info(
-          `searching for settings change ${name} ${key} ${JSON.stringify(
+          `searching for settings change ${index} ${key} ${JSON.stringify(
             value
           )}`
         );
-        console.info(`scripts: ${JSON.stringify(scripts)}`);
-        let idx = -1;
-        for (let i = 0; i < scripts.length; i++) {
-          if (scripts[i].name === name) {
-            idx = i;
-          }
+        console.info(`value: ${JSON.stringify(value)}`);
+        console.info(`old scripts: ${JSON.stringify(scripts)}`);
+        let scriptToMove: Script;
+        switch (action) {
+          case 'change':
+            scripts[index][key] = value;
+            break;
+          case 'delete':
+            scripts.splice(index, 1);
+            break;
+          case 'moveup':
+            [scriptToMove] = scripts.splice(index, 1);
+            scripts.splice(index - 1, 0, scriptToMove);
+            break;
+          case 'movedown':
+            [scriptToMove] = scripts.splice(index, 1);
+            scripts.splice(index - 1, 0, scriptToMove);
+            break;
         }
-        if (idx >= 0) {
-          const script = scripts[idx];
-          script[key] = value;
-          console.info(
-            `putting settings in storage: ${JSON.stringify(scripts)}`
-          );
-          settingsStorage.setItem('scripts', JSON.stringify(scripts));
-        } else {
-          console.info(`item not found!`);
-        }
+        console.info(`putting settings in storage: ${JSON.stringify(scripts)}`);
+        settingsStorage.setItem('scripts', JSON.stringify(scripts));
       } catch (err) {
         console.error(`failed to update scripts prop`, err);
       }
     };
+
+    const scripts: Script[] = JSON.parse(settings.scripts);
+    const scriptsSection = Scripts(scripts, propChanged);
+    const addScript = () => {
+      scripts.push({
+        name: `script_${scripts.length + 1}`,
+        title: `Script ${scripts.length + 1}`,
+        params: '{}',
+      });
+      settingsStorage.setItem('scripts', JSON.stringify(scripts));
+    };
+
     return (
       <Page>
-        <HassSettings />
+        <HassSettings addScript={addScript} />
 
-        <Section title={<Text>Scripts</Text>}>
+        {/* <Section title={<Text>Scripts</Text>}>
           <AdditiveList
             settingsKey="scripts"
             addAction={
@@ -106,7 +219,9 @@ const SettingsPage = ({ settings, settingsStorage }) => {
               />
             )}
           />
-        </Section>
+        </Section> */}
+
+        {scriptsSection}
 
         <Section title={<Text>Reset</Text>}>
           <Button

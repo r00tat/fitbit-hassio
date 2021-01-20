@@ -1,5 +1,6 @@
 export interface Script {
   name: string;
+  title?: string;
   params?: string;
 }
 
