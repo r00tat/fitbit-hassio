@@ -154,11 +154,8 @@ const SettingsPage = ({ settings, settingsStorage }) => {
       try {
         const scripts: Script[] = JSON.parse(settings.scripts);
         console.info(
-          `searching for settings change ${index} ${key} ${JSON.stringify(
-            value
-          )}`
+          `settings.scripts ${action} ${index} ${key} ${JSON.stringify(value)}`
         );
-        console.info(`value: ${JSON.stringify(value)}`);
         console.info(`old scripts: ${JSON.stringify(scripts)}`);
         let scriptToMove: Script;
         switch (action) {
@@ -174,10 +171,10 @@ const SettingsPage = ({ settings, settingsStorage }) => {
             break;
           case 'movedown':
             [scriptToMove] = scripts.splice(index, 1);
-            scripts.splice(index - 1, 0, scriptToMove);
+            scripts.splice(index + 1, 0, scriptToMove);
             break;
         }
-        console.info(`putting settings in storage: ${JSON.stringify(scripts)}`);
+        console.info(`putting scripts in storage: ${JSON.stringify(scripts)}`);
         settingsStorage.setItem('scripts', JSON.stringify(scripts));
       } catch (err) {
         console.error(`failed to update scripts prop`, err);
