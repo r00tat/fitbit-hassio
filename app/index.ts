@@ -1,56 +1,55 @@
+import document from 'document';
+import { registerHandler, sendData } from '../common/messaging';
 import { Script, Settings } from '../common/settings';
 import { setupList } from './list';
-import { registerHandler, sendData } from '../common/messaging';
 import { initialize as initializeSettings, settingsMessage } from './settings';
-import document from 'document';
+import { confirm } from './confirm';
 
 let settings: Settings = {};
-let scriptToCall: Script;
+
+function indexPage() {
+  document.replaceSync(`./resources/index.gui`);
+  setupList(settings.scripts, (script: Script) => {
+    confirm(script, confirmScript);
+  });
+}
 
 function settingsChanged(newSettings: Settings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
   console.info(`new scripts: ${JSON.stringify(newSettings.scripts)}`);
-  setupList(settings.scripts, onScriptClick);
+  const {
+    url: { name: url } = {},
+    token: { name: token } = {},
+    scripts = [],
+  } = settings;
+  if (!url || !token || !scripts) {
+    console.info(`settings not configured:`);
+    console.info(` url: ${url}`);
+    console.info(` token: ${token}`);
+    console.info(` scripts: ${JSON.stringify(scripts)}`);
+    document.replaceSync(`./resources/message.gui`);
+    document.getElementById(
+      'message-text'
+    ).text = `Settings are not configured. Please setup Home Assistant Settings to use this app.`;
+    document.getElementById('touch').addEventListener('click', () => {
+      indexPage();
+    });
+  } else {
+    indexPage();
+  }
 }
 
-const confirmScript = (yes?: boolean) => () => {
-  console.info(
-    `confirmed ${yes ? 'true' : 'false'} script ${scriptToCall.name}`
-  );
-  (document as any).replaceSync(`./resources/index.gui`);
+const confirmScript = (script: Script, yes?: boolean) => {
+  console.info(`confirmed ${yes ? 'true' : 'false'} script ${script.name}`);
   if (yes) {
     sendData({
       type: 'request',
-      data: scriptToCall,
+      data: script,
     });
   }
-  setupList(settings.scripts, onScriptClick);
+  indexPage();
 };
-
-function onScriptClick(script: Script) {
-  try {
-    console.info(`clicked on script ${JSON.stringify(script)}`);
-    scriptToCall = script;
-
-    (document as any).replaceSync(`./resources/confirm.gui`);
-    // const buttonYes = document.getElementById('button-yes');
-    // console.info(`button yes: ${buttonYes.getAttribute('id')}`);
-    document.getElementById('confirm-text').text = `run ${
-      scriptToCall.title || scriptToCall.name
-    }?`.substr(0, 40);
-    document
-      .getElementById('button-yes')
-      .getElementById('touch')
-      .addEventListener('click', confirmScript(true));
-    document
-      .getElementById('button-no')
-      .getElementById('touch')
-      .addEventListener('click', confirmScript(false));
-  } catch (err) {
-    console.error(`failed to click on script ${err}\n${err.stack}`);
-  }
-}
 
 try {
   console.log('Hello world!');

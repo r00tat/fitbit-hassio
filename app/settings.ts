@@ -22,6 +22,7 @@ export function initialize(callback: (settings: Settings) => void): void {
 export function settingsMessage(message: Message): void {
   console.info(`settings message: ${JSON.stringify(message)}`);
   settings[message.data.key] = message.data.value;
+  saveSettings();
   onsettingschange(settings);
 }
 
