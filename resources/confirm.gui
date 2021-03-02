@@ -15,7 +15,8 @@
   </defs>
 
   <!-- <rect id="bg" class="bg" /> -->
-  <text id="confirm-text" text-length="40" fill="red" class="defaultText" height="40" />
+  <textarea id="confirm-text" text-length="100" fill="red" class="defaultText" height="40%" />
+  <!-- <text id="confirm-text" text-length="40" fill="red" class="defaultText" height="40" /> -->
   <use id="button-yes" href="#button" class="button primary application-fill confirm-button" y="60%">
     <set href="#text" attributeName="text-buffer" to="Yes" />
   </use>
