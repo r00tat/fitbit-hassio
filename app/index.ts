@@ -1,6 +1,6 @@
 import document from 'document';
 import { registerHandler, sendData } from '../common/messaging';
-import { Script, Settings } from '../common/settings';
+import { helloWorldScript, Script, Settings } from '../common/settings';
 import { setupList } from './list';
 import { initialize as initializeSettings, settingsMessage } from './settings';
 import { confirm } from './confirm';
@@ -21,7 +21,7 @@ function settingsChanged(newSettings: Settings) {
   const {
     url: { name: url } = {},
     token: { name: token } = {},
-    scripts = [],
+    scripts = [helloWorldScript],
   } = settings;
   if (!url || !token || !scripts) {
     console.info(`settings not configured:`);

@@ -138,7 +138,7 @@ const SettingsPage = ({ settings, settingsStorage }) => {
     if (!settings.scripts) {
       settings.scripts = JSON.stringify([
         {
-          title: 'My first script',
+          title: 'homeassistant script',
           name: 'script_name',
           params: '{}',
         },

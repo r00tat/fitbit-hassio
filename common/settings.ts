@@ -13,3 +13,9 @@ export interface Settings {
   };
   scripts?: Script[];
 }
+
+export const helloWorldScript: Script = {
+  title: 'homeassistant script',
+  name: 'script_name',
+  params: '{}',
+};
