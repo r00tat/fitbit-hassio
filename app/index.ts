@@ -9,6 +9,9 @@ let settings: Settings = {};
 
 function indexPage() {
   document.replaceSync(`./resources/index.gui`);
+  if (!settings.scripts || settings.scripts.length === 0) {
+    settings.scripts = [helloWorldScript];
+  }
   setupList(settings.scripts, (script: Script) => {
     confirm(script, confirmScript);
   });
@@ -21,9 +24,9 @@ function settingsChanged(newSettings: Settings) {
   const {
     url: { name: url } = {},
     token: { name: token } = {},
-    scripts = [helloWorldScript],
+    scripts = [],
   } = settings;
-  if (!url || !token || !scripts) {
+  if (!url || !token || !scripts || scripts.length === 0) {
     console.info(`settings not configured:`);
     console.info(` url: ${url}`);
     console.info(` token: ${token}`);
@@ -62,9 +65,9 @@ try {
   registerHandler('fullSettings', (message) => {
     settings = message.data;
     console.info(
-      `got full settings from companion: ${JSON.stringify(settings)}`
+      `got full settings from companion: ${JSON.stringify(message.data)}`
     );
-    indexPage();
+    settingsChanged(message.data);
   });
   setTimeout(() => {
     console.info(`sending app Startup to companion`);
