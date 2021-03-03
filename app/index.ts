@@ -59,6 +59,20 @@ try {
   registerHandler('response', (message) => {
     console.info(`got response: ${JSON.stringify(message.data)}`);
   });
+  registerHandler('fullSettings', (message) => {
+    settings = message.data;
+    console.info(
+      `got full settings from companion: ${JSON.stringify(settings)}`
+    );
+    indexPage();
+  });
+  setTimeout(() => {
+    console.info(`sending app Startup to companion`);
+    sendData({
+      type: 'appStartup',
+      data: {},
+    });
+  }, 500);
 } catch (err) {
   console.error('Failed to initialize', err, err.stack);
 }

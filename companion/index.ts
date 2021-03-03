@@ -2,6 +2,7 @@ import { me as companion } from 'companion';
 import { settingsStorage } from 'settings';
 import { sendData, registerHandler, Message } from '../common/messaging';
 import { Hassio } from './hassio';
+import { Settings } from '../common/settings';
 
 if (!companion.permissions.granted('access_internet')) {
   console.error("We're not allowed to access the internet!");
@@ -15,6 +16,7 @@ function initialize() {
     }
   });
   registerHandler('request', hassioRequest);
+  registerHandler('appStartup', appStartup);
 }
 
 async function hassioRequest(message: Message) {
@@ -45,6 +47,22 @@ function sendValue(key: string, val: string) {
 
 function sendSettingData(data: any) {
   sendData({ data, type: 'settings' });
+}
+
+function appStartup(message: Message) {
+  console.info(`app has started, sending full settings`);
+  const settings: Settings = {};
+  ['url', 'token', 'scripts'].forEach((key) => {
+    try {
+      settings[key] = JSON.parse(settingsStorage.getItem(key));
+    } catch (err) {
+      console.warn(`failed to parse setting ${key}`, err);
+    }
+  });
+  sendData({
+    data: settings,
+    type: 'fullSettings',
+  });
 }
 
 initialize();
