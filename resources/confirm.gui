@@ -7,20 +7,20 @@
 
     <symbol id="button" class="button">
       <rect id="bg" class="bg" />
-      <gradientRect width="100%" height="100%" gradient-type="linear" gradient-x1="0" gradient-y1="0" gradient-x2="0" gradient-y2="100%" gradient-color1="black" gradient-color2="fb-blue" />
-      <text id="text" text-length="4" />
-      <rect class="line" />
+      <rect x="2%" y="2%" width="96%" height="96%" fill="white" />
+      <rect x="4%" y="6%" width="92%" height="88%" class="application-fill" />
+      <textarea id="text" text-length="64" x="10%" y="10%" width="80%" height="80%" class="defaultText" fill="white" text-anchor="middle" display-align="center" />
       <rect id="touch" class="full-size touch-area" pointer-events="all" />
     </symbol>
   </defs>
 
   <!-- <rect id="bg" class="bg" /> -->
-  <textarea id="confirm-text" text-length="100" fill="red" class="defaultText" height="40%" />
+  <textarea id="confirm-text" text-length="100" class="defaultText application-fill" height="40%" text-anchor="middle" display-align="center" />
   <!-- <text id="confirm-text" text-length="40" fill="red" class="defaultText" height="40" /> -->
-  <use id="button-yes" href="#button" class="button primary application-fill confirm-button" y="60%">
+  <use id="button-yes" href="#button" class="button primary confirm-button" y="60%">
     <set href="#text" attributeName="text-buffer" to="Yes" />
   </use>
-  <use id="button-no" href="#button" class="button secondary application-fill confirm-button" y="$">
+  <use id="button-no" href="#button" class="button secondary confirm-button" y="$">
     <set href="#text" attributeName="text-buffer" to="No" />
   </use>
 
