@@ -2,7 +2,7 @@
   "name": "hassio",
   "version": "0.1.0",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Apache",
   "devDependencies": {
     "@fitbit/sdk": "^4.2.1",
     "@fitbit/sdk-cli": "^1.8.0-pre.0",
@@ -16,7 +16,7 @@
   "fitbit": {
     "appUUID": "abfa3ee5-7ff5-47c7-acb3-d9e3b6ea6ff0",
     "appType": "app",
-    "appDisplayName": "Home Assistant",
+    "appDisplayName": "HASS Scripts",
     "iconFile": "resources/icon.png",
     "wipeColor": "#ffffff",
     "requestedPermissions": [

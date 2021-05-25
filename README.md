@@ -2,6 +2,8 @@
 
 This Fitbit App for Fitbit OS version 4 (Versa 2) allows you to call scripts on your home assistant. You can configure the address, the bearer token and the scripts you'd like to call.
 
+This app is not affiliated with the [home assistant project](https://www.home-assistant.io/) itself, it's just built to be used with home assistant.
+
 It is not perfect, as I had my troubles with the styling on fitbit and the documentation, but it does what it should.
 
 ## Development
