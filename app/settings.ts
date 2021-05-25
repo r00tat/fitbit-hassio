@@ -14,8 +14,11 @@ const SETTINGS_FILE = 'settings.cbor';
 let settings: Settings, onsettingschange: (settings: Settings) => void;
 
 export function initialize(callback: (settings: Settings) => void): void {
+  console.log(`init 1`);
   settings = loadSettings();
+  console.log(`init 2`);
   onsettingschange = callback;
+  console.log(`init 3`);
   onsettingschange(settings);
 }
 

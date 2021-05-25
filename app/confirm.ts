@@ -1,8 +1,9 @@
 import document from 'document';
 import { vibration } from 'haptics';
 import { Script } from '../common/settings';
+import { MyDocument } from './document';
 
-export function confirm(
+export async function confirm(
   script: Script,
   confirmScript: (script: Script, confirmed: boolean) => void
 ) {
@@ -10,7 +11,7 @@ export function confirm(
     console.info(`clicked on script ${JSON.stringify(script)}`);
     // scriptToCall = script;
 
-    document.replaceSync(`./resources/confirm.gui`);
+    await (document as MyDocument).replace(`./resources/confirm.view`);
     // const buttonYes = document.getElementById('button-yes');
     // console.info(`button yes: ${buttonYes.getAttribute('id')}`);
     document.getElementById('confirm-text').text = `run ${

@@ -4,11 +4,12 @@ import { helloWorldScript, Script, Settings } from '../common/settings';
 import { setupList } from './list';
 import { initialize as initializeSettings, settingsMessage } from './settings';
 import { confirm } from './confirm';
+import { MyDocument } from './document';
 
 let settings: Settings = {};
 
-function indexPage() {
-  document.replaceSync(`./resources/index.gui`);
+async function indexPage() {
+  await (document as MyDocument).replace(`./resources/index.view`);
   if (!settings.scripts || settings.scripts.length === 0) {
     settings.scripts = [helloWorldScript];
   }
@@ -17,7 +18,7 @@ function indexPage() {
   });
 }
 
-function settingsChanged(newSettings: Settings) {
+async function settingsChanged(newSettings: Settings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
   console.info(`new scripts: ${JSON.stringify(newSettings.scripts)}`);
@@ -31,7 +32,8 @@ function settingsChanged(newSettings: Settings) {
     console.info(` url: ${url}`);
     console.info(` token: ${token}`);
     console.info(` scripts: ${JSON.stringify(scripts)}`);
-    document.replaceSync(`./resources/message.gui`);
+    await (document as MyDocument).replace(`./resources/message.view`);
+    console.log(`  document replaced`);
     document.getElementById(
       'message-text'
     ).text = `Settings are not configured. Please setup Home Assistant Settings to use this app.`;
@@ -57,11 +59,15 @@ const confirmScript = (script: Script, yes?: boolean) => {
 try {
   console.log('Hello world!');
 
+  console.log(`init`);
   initializeSettings(settingsChanged);
+  console.log(`register handler settings`);
   registerHandler('settings', settingsMessage);
+  console.log(`register handler response`);
   registerHandler('response', (message) => {
     console.info(`got response: ${JSON.stringify(message.data)}`);
   });
+  console.log(`register handler fullsettings`);
   registerHandler('fullSettings', (message) => {
     settings = message.data;
     console.info(
@@ -69,6 +75,7 @@ try {
     );
     settingsChanged(message.data);
   });
+  console.log(`settimeout`);
   setTimeout(() => {
     console.info(`sending app Startup to companion`);
     sendData({
