@@ -49,4 +49,8 @@ export class Hassio {
   async callService(domain: string, service: string, data: any): Promise<any> {
     return await this.post(`/api/services/${domain}/${service}`, data);
   }
+
+  async hello(): Promise<any> {
+    return this.get(`/api/`);
+  }
 }

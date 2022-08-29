@@ -5,7 +5,14 @@ export interface MessagingEvent extends Event {
 }
 
 export interface Message {
-  type: 'settings' | 'request' | 'response' | 'appStartup' | 'fullSettings';
+  type:
+    | 'settings'
+    | 'request'
+    | 'response'
+    | 'appStartup'
+    | 'fullSettings'
+    | 'hello'
+    | 'status';
   data: any;
 }
 

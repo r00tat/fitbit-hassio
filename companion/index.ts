@@ -17,6 +17,25 @@ function initialize() {
   });
   registerHandler('request', hassioRequest);
   registerHandler('appStartup', appStartup);
+  registerHandler('hello', async (message: Message) => {
+    try {
+      const url = JSON.parse(settingsStorage.getItem('url')).name;
+      console.info(`say hello: ${JSON.stringify(url)}`);
+      const token = JSON.parse(settingsStorage.getItem('token')).name;
+      const hass = new Hassio(url, token);
+      await hass.hello();
+      sendData({
+        type: 'status',
+        data: { status: 'OK' },
+      });
+    } catch (err) {
+      console.error(`failed to say hello`, err);
+      sendData({
+        type: 'status',
+        data: { status: 'NOTOK' },
+      });
+    }
+  });
 }
 
 async function hassioRequest(message: Message) {

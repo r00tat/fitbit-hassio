@@ -17,10 +17,19 @@ function indexPage() {
   });
 }
 
-function settingsChanged(newSettings: Settings) {
+async function settingsChanged(newSettings: Settings) {
   settings = newSettings;
   console.info(`new settings: ${JSON.stringify(newSettings)}`);
   console.info(`new scripts: ${JSON.stringify(newSettings.scripts)}`);
+  if (settings.scripts === null) {
+    settings.scripts = [];
+  }
+  if (settings.token === null) {
+    settings.token = { name: '' };
+  }
+  if (settings.url === null) {
+    settings.url = { name: '' };
+  }
   const {
     url: { name: url } = {},
     token: { name: token } = {},
@@ -40,6 +49,10 @@ function settingsChanged(newSettings: Settings) {
     });
   } else {
     indexPage();
+    sendData({
+      type: 'hello',
+      data: {},
+    });
   }
 }
 
@@ -68,6 +81,19 @@ try {
       `got full settings from companion: ${JSON.stringify(message.data)}`
     );
     settingsChanged(message.data);
+  });
+  registerHandler('status', async (message) => {
+    const status = message.data.status;
+    console.info(`status: ${message.data.status}`);
+    if (status === 'NOTOK') {
+      document.replaceSync(`./resources/message.gui`);
+      document.getElementById(
+        'message-text'
+      ).text = `Not connected to home assisstant!`;
+      document.getElementById('touch').addEventListener('click', () => {
+        indexPage();
+      });
+    }
   });
   setTimeout(() => {
     console.info(`sending app Startup to companion`);
